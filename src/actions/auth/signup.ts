@@ -1,6 +1,6 @@
 "use server";
 
-import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
+import { sendVerificationEmail } from "@/lib/sendVerificationEmail";
 import { hashPassword } from "@/lib/bcrypt";
 import { generateOTP } from "@/lib/otp";
 import prisma from "@/lib/prisma";

@@ -3,20 +3,16 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-
 import { loginSchema } from "@/schemas/loginSchema";
 import type { LoginSchema } from "@/schemas/loginSchema";
 
-import { Brain, BookOpen, Mail, Lock, Check } from "lucide-react";
+import Image from "next/image";
+import { Mail, Lock, Check } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-import { login } from "@/actions/login";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 const highlights = [
   "AI-powered search across every note",
@@ -25,7 +21,6 @@ const highlights = [
 ];
 
 export default function LoginPage() {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -39,26 +34,9 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginSchema) => {
-  const response = await login(data);
+    console.log(data);
+  };
 
-  if (!response.success) {
-    toast.error(response.message);
-
-    // Redirect unverified users to verify page
-    if (response.redirectTo) {
-      setTimeout(() => {
-        router.push(response.redirectTo!);
-      }, 1000);
-    }
-
-    return;
-  }
-toast.success(response.message);
-
-setTimeout(() => {
-  router.push(response.redirectTo!);
-}, 1000);
-};
   return (
     <div className="min-h-screen w-full bg-[#FDFCF9] lg:grid lg:grid-cols-2">
       {/* Brand panel — hidden below lg, form takes the full screen on mobile */}
@@ -92,8 +70,16 @@ setTimeout(() => {
 
         {/* Top: brand mark */}
         <div className="relative z-10 flex items-center">
-          <Brain className="h-10 w-10 text-amber-400" strokeWidth={1.6} />
-          <BookOpen className="-ml-2.5 h-10 w-10 text-neutral-400" strokeWidth={1.6} />
+          <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-white/95 p-2">
+            <Image
+              src="/codevault-logo.svg"
+              alt="CodeVault"
+              width={144}
+              height={100}
+              className="h-full w-auto"
+              priority
+            />
+          </span>
           <span className="ml-3 font-serif text-2xl font-semibold tracking-tight text-white">
             Code<span className="text-amber-400">Vault</span>
           </span>
@@ -135,8 +121,14 @@ setTimeout(() => {
         <div className="w-full max-w-sm">
           {/* Compact brand row — mobile only */}
           <div className="mb-10 flex items-center justify-center lg:hidden">
-            <Brain className="h-8 w-8 text-amber-500" strokeWidth={1.75} />
-            <BookOpen className="-ml-2 h-8 w-8 text-neutral-700" strokeWidth={1.75} />
+            <Image
+              src="/codevault-logo.svg"
+              alt="CodeVault"
+              width={144}
+              height={100}
+              className="h-9 w-auto"
+              priority
+            />
             <span className="ml-2.5 font-serif text-xl font-semibold tracking-tight text-neutral-900">
               Code<span className="text-amber-500">Vault</span>
             </span>
@@ -152,9 +144,9 @@ setTimeout(() => {
             Continue building your knowledge base.
           </p>
 
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="mt-8 space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} noValidate className="mt-8 space-y-4">
             {/* Email */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label
                 htmlFor="email"
                 className="text-sm font-medium text-neutral-700"
@@ -182,7 +174,7 @@ setTimeout(() => {
             </div>
 
             {/* Password */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <Label
                   htmlFor="password"

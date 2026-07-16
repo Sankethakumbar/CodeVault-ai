@@ -423,3 +423,33 @@ Token Exists?
           │
           ▼
         Redirect Login
+
+
+
+
+Take this structure:
+
+notes
+├── new
+│   └── page.tsx
+└── [id]
+    ├── page.tsx
+    └── edit
+        └── page.tsx
+
+These routes become:
+
+notes/new          → page.tsx
+notes/123          → page.tsx
+notes/123/edit     → page.tsx
+
+
+
+lib/
+├── auth.ts                  ✅ Authentication helpers
+├── bcrypt.ts                ✅ Password hashing
+├── jwt.ts                   ✅ JWT functions
+├── otp.ts                   ✅ OTP generation
+├── prisma.ts                ✅ Prisma client
+├── sendVerificationEmail.ts ✅ Email utility
+└── utils.ts                 ✅ shadcn's cn() helper
