@@ -27,14 +27,18 @@ export async function login(
       };
     }
 
-    if (!user.isVerified) {
-      return {
-        success: false,
-        status: 403,
-        message: "Please verify your email before logging in.",
-        redirectTo: `/verify?email=${user.email}`,
-      };
-    }
+    // DEMO MODE
+    // Email verification temporarily disabled for recruiter review.
+
+
+    // if (!user.isVerified) {
+    //   return {
+    //     success: false,
+    //     status: 403,
+    //     message: "Please verify your email before logging in.",
+    //     redirectTo: `/verify?email=${user.email}`,
+    //   };
+    // }
 
     const isPasswordCorrect = await comparePassword(
       data.password,

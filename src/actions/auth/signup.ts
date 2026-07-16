@@ -11,7 +11,6 @@ export async function signup(
   data: SignupSchema
 ): Promise<ApiResponse> {
   try {
-    // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: {
         email: data.email,
@@ -22,7 +21,6 @@ export async function signup(
     // User already exists
     // ============================
     if (existingUser) {
-      // Email already verified
       if (existingUser.isVerified) {
         return {
           success: false,
@@ -31,42 +29,39 @@ export async function signup(
         };
       }
 
-      // User exists but email is not verified
-      const verifyCode = generateOTP();
-      const verifyCodeExpiry = new Date(
-        Date.now() + 10 * 60 * 1000
-      );
+      // ------------------------------------------------------------------
+      // DEMO MODE
+      // ------------------------------------------------------------------
+      // Resend's development mode only delivers emails to verified
+      // recipients. Since recruiters need to use the application,
+      // we bypass the email verification flow in this demo build.
+      //
+      // Production Flow:
+      // - Generate OTP
+      // - Send verification email
+      // - Redirect user to /auth/verify
+      //
+      // Demo Flow:
+      // - Mark user as verified
+      // - Redirect directly to login
+      // ------------------------------------------------------------------
 
       await prisma.user.update({
         where: {
           id: existingUser.id,
         },
         data: {
-          verifyCode,
-          verifyCodeExpiry,
+          isVerified: true,
+          verifyCode: null,
+          verifyCodeExpiry: null,
         },
       });
-
-      const emailResponse = await sendVerificationEmail({
-        email: existingUser.email,
-        username: existingUser.username,
-        verifyCode,
-      });
-      console.log("Email response",emailResponse);
-
-      if (!emailResponse.success) {
-        return {
-          success: false,
-          status: 500,
-          message: emailResponse.message,
-        };
-      }
 
       return {
         success: true,
         status: 200,
-        message: "Verification code sent successfully.",
-        redirectTo: `/verify?email=${existingUser.email}`,
+        message: "Account activated successfully.",
+        redirectTo: "/auth/login",
       };
     }
 
@@ -75,6 +70,9 @@ export async function signup(
     // ============================
 
     const hashedPassword = await hashPassword(data.password);
+
+    // These are kept for production.
+    // They are unused in demo mode.
 
     const verifyCode = generateOTP();
     const verifyCodeExpiry = new Date(
@@ -86,12 +84,27 @@ export async function signup(
         username: data.username,
         email: data.email,
         password: hashedPassword,
-        isVerified: false,
+
+        // DEMO MODE
+        // Users are created as verified so recruiters
+        // can access the application without waiting for
+        // an email OTP.
+
+        isVerified: true,
+
         verifyCode,
         verifyCodeExpiry,
       },
     });
 
+    // ------------------------------------------------------------------
+    // PRODUCTION ONLY
+    //
+    // Uncomment this block after configuring a verified
+    // Resend domain.
+    // ------------------------------------------------------------------
+
+    /*
     const emailResponse = await sendVerificationEmail({
       email: user.email,
       username: user.username,
@@ -110,7 +123,15 @@ export async function signup(
       success: true,
       status: 201,
       message: "Account created successfully.",
-      redirectTo: `/verify?email=${user.email}`,
+      redirectTo: `/auth/verify?email=${user.email}`,
+    };
+    */
+
+    return {
+      success: true,
+      status: 201,
+      message: "Account created successfully.",
+      redirectTo: "/auth/login",
     };
   } catch (error) {
     console.error("Signup Error:", error);

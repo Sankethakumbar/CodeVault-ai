@@ -15,7 +15,7 @@ export default async function DashboardPage() {
 
 
   if (!user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
     const notes = await prisma.note.findMany({
   where: {

@@ -8,6 +8,7 @@ import { Mail } from "lucide-react";
 
 import { verify } from "@/actions/auth/verify";
 import { toast } from "sonner";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -148,12 +149,13 @@ export default function VerifyPage() {
           <p className="mt-6 text-center text-sm text-neutral-500">
             Didn&apos;t receive the code?{" "}
             {/* TODO: wire up resend handler */}
-            <button
+            <Link
               type="button"
+              href="/coming-soon?feature=Resend-verification-code"
               className="font-medium text-amber-600 underline-offset-4 hover:underline"
             >
               Resend Code
-            </button>
+            </Link>
           </p>
         </div>
 

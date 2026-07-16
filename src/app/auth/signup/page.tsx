@@ -41,19 +41,40 @@ export default function SignupPage() {
 
   const router = useRouter();
 
+  //DEMO reason
+
+  // const onSubmit = async (data: SignupSchema) => {
+  //   const response = await signup(data);
+
+  //   if (!response.success) {
+  //     toast.error(response.message);
+  //     return;
+  //   }
+
+  //   toast.success(response.message);
+  //   setTimeout(() => {
+  //     router.push(`/verify?email=${data.email}`);
+  //   }, 1000);
+  // };
+
+
+
   const onSubmit = async (data: SignupSchema) => {
-    const response = await signup(data);
+  const response = await signup(data);
 
-    if (!response.success) {
-      toast.error(response.message);
-      return;
+  if (!response.success) {
+    toast.error(response.message);
+    return;
+  }
+
+  toast.success(response.message);
+
+  setTimeout(() => {
+    if (response.redirectTo) {
+      router.push(response.redirectTo);
     }
-
-    toast.success(response.message);
-    setTimeout(() => {
-      router.push(`/verify?email=${data.email}`);
-    }, 1000);
-  };
+  }, 1000);
+};
 
   return (
     <div className="min-h-screen w-full bg-[#FDFCF9] lg:grid lg:grid-cols-2">
@@ -263,7 +284,7 @@ export default function SignupPage() {
           <p className="mt-8 text-center text-sm text-neutral-500">
             Already have an account?{" "}
             <Link
-              href="/login"
+              href="/auth/login"
               className="font-medium text-amber-600 underline-offset-4 hover:underline"
             >
               Login

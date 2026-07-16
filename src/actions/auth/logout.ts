@@ -8,5 +8,5 @@ export async function logout() {
 
   cookieStore.delete("token");
 
-  redirect("/login");
+  redirect("/auth/login");
 }

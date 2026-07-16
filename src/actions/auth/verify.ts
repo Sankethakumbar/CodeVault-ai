@@ -30,7 +30,7 @@ export async function verify(
                 success: true,
                 status: 200,
                 message: "Email is already verified.",
-                redirectTo: "/login",
+                redirectTo: "/auth/login",
             };
         }
 
@@ -77,7 +77,7 @@ export async function verify(
             success: true,
             status: 200,
             message: "Email verified successfully.",
-            redirectTo: "/login",
+            redirectTo: "/auth/login",
         };
     } catch (error) {
         console.error("Verify Error:", error);

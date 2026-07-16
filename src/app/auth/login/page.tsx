@@ -14,6 +14,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { login } from "@/actions/auth/login";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
 const highlights = [
   "AI-powered search across every note",
   "Organize code snippets by topic",
@@ -21,6 +25,7 @@ const highlights = [
 ];
 
 export default function LoginPage() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -33,9 +38,20 @@ export default function LoginPage() {
     },
   });
 
-  const onSubmit = async (data: LoginSchema) => {
-    console.log(data);
-  };
+const onSubmit = async (data: LoginSchema) => {
+  const response = await login(data);
+
+  if (!response.success) {
+    toast.error(response.message);
+    return;
+  }
+
+  toast.success(response.message);
+
+  if (response.redirectTo) {
+    router.push(response.redirectTo);
+  }
+};
 
   return (
     <div className="min-h-screen w-full bg-[#FDFCF9] lg:grid lg:grid-cols-2">
@@ -182,12 +198,12 @@ export default function LoginPage() {
                 >
                   Password
                 </Label>
-                <Link
-                  href="/forgot-password"
-                  className="text-xs font-medium text-amber-600 hover:underline"
-                >
-                  Forgot password?
-                </Link>
+               <Link
+  href="/coming-soon?feature=forgot-password"
+  className="text-xs font-medium text-amber-600 hover:underline"
+>
+  Forgot password?
+</Link>
               </div>
               <div className="relative">
                 <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
@@ -221,11 +237,11 @@ export default function LoginPage() {
           <p className="mt-8 text-center text-sm text-neutral-500">
             Don&apos;t have an account?{" "}
             <Link
-              href="/signup"
-              className="font-medium text-amber-600 underline-offset-4 hover:underline"
-            >
-              Create Account
-            </Link>
+  href="/auth/signup"
+  className="font-medium text-amber-600 underline-offset-4 hover:underline"
+>
+  Create Account
+</Link>
           </p>
         </div>
       </div>

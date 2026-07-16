@@ -13,7 +13,7 @@ export function proxy(request: NextRequest) {
 
   // No token -> Redirect to login
   if (!token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
   // Verify JWT
@@ -21,7 +21,7 @@ export function proxy(request: NextRequest) {
 
   // Invalid or expired token
   if (!decoded) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
   // Token is valid
