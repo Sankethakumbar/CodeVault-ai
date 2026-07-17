@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense,useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 import Image from "next/image";
@@ -20,7 +20,7 @@ import {
 const otpSlotClassName =
   "h-14 w-12 rounded-lg border-2 border-neutral-200 bg-white text-lg font-semibold text-neutral-800 shadow-sm data-[active=true]:border-amber-400 data-[active=true]:ring-2 data-[active=true]:ring-amber-400/40";
 
-export default function VerifyPage() {
+export function VerifyContent() {
   const [verifyCode, setVerifyCode] = useState("");
 
   const searchParams = useSearchParams();
@@ -165,5 +165,14 @@ export default function VerifyPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyContent />
+    </Suspense>
   );
 }

@@ -4,11 +4,7 @@ import type { NextRequest } from "next/server";
 import { verifyToken } from "@/lib/jwt";
 
 export function proxy(request: NextRequest) {
-      console.log(
-  "🔥",
-  request.method,
-  request.nextUrl.pathname
-);
+
   const token = request.cookies.get("token")?.value;
 
   // No token -> Redirect to login
@@ -28,6 +24,10 @@ export function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 
+
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/notes/:path*",   // ← ADD — protects /notes/new, /notes/[id]/edit
+  ],
 };

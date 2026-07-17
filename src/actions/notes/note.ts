@@ -38,16 +38,22 @@ export async function createNote(
   return { success: true };
 }
 
+
+// deleteNote — AFTER (fixed)
 export async function deleteNote(id: string) {
+  const user = await getCurrentUser();       // ← ADD
+  if (!user) throw new Error("Unauthorized"); // ← ADD
   await prisma.note.delete({
     where: {
       id,
+      userId: user.id,        //  only deletes if user owns it
     },
   });
-
   revalidatePath("/dashboard");
   redirect("/dashboard");
 }
+
+
 
 export async function updateNote(
   id: string,
@@ -59,9 +65,13 @@ export async function updateNote(
   interviewQuestions: string[],
   flashcards: { question: string; answer: string }[]
 ) {
+    const user = await getCurrentUser();        // ← ADD
+  if (!user) throw new Error("Unauthorized"); // ← ADD
   await prisma.note.update({
+    
     where: {
       id,
+      userId: user.id,         // ← ADD — only updates if user owns it
     },
     data: {
       title,
