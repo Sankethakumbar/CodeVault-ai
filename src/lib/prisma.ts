@@ -1,6 +1,6 @@
 // Create a single Prisma client instance and reuse it throughout the application.
 
-import { PrismaClient } from "@/generated/prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as {
   prisma?: PrismaClient;
