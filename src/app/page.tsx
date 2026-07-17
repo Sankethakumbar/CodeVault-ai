@@ -15,16 +15,19 @@ export default function LandingPage() {
       {/* Navbar */}
       <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#0F172A]/90 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <Link href="/" className="flex items-center">
-            <span className="flex items-center rounded-lg bg-white px-3 py-1.5 shadow-sm">
+          <Link href="/" className="flex items-center gap-3">
+            <span className="flex items-center rounded-lg bg-white px-2.5 py-1.5 shadow-sm">
               <Image
                 src="/codevault-logo.svg"
                 alt="CodeVault"
                 width={677}
                 height={369}
-                className="h-7 w-auto"
+                className="h-6 w-auto"
                 priority
               />
+            </span>
+            <span className="font-serif text-lg font-semibold text-white">
+              Code<span className="text-[#F59E0B]">Vault</span>
             </span>
           </Link>
 

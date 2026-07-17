@@ -1,20 +1,15 @@
-// src/components/dashboard/navbar/Navbar.tsx
+// src/components/dashboard/Navbar.tsx
 "use client";
 
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Search, Plus, LogOut, User, Settings } from "lucide-react";
+import { Search, Plus, LogOut } from "lucide-react";
+
+import { logout } from "@/actions/auth/logout";
+
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 interface NavbarProps {
   user: {
@@ -22,10 +17,12 @@ interface NavbarProps {
     email: string;
     avatarUrl?: string;
   };
+  searchQuery?: string;
 }
 
-export function Navbar({ user }: NavbarProps) {
+export function Navbar({ user, searchQuery = "" }: NavbarProps) {
   const router = useRouter();
+
   const initials = user.name
     .split(" ")
     .map((part) => part[0])
@@ -46,24 +43,39 @@ export function Navbar({ user }: NavbarProps) {
             className="h-8 w-8"
             priority
           />
+
           <span className="font-serif text-lg font-semibold text-[#0B1220]">
             Code<span className="text-[#F59E0B]">Vault</span>
           </span>
         </Link>
 
-        {/* Search trigger */}
-        <button
-          type="button"
-          className="hidden flex-1 items-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-2 text-sm text-[#0B1220]/40 transition hover:border-black/20 md:flex"
+        {/* Search */}
+        <form
+          action="/dashboard"
+          method="GET"
+          className="hidden flex-1 md:flex"
         >
-          <Search className="h-4 w-4" />
-          <span>Search your vault...</span>
-          <kbd className="ml-auto rounded-md border border-black/10 bg-[#FDFCF9] px-1.5 py-0.5 font-mono text-[10px] text-[#0B1220]/40">
-            ⌘K
-          </kbd>
-        </button>
+          <div className="group flex w-full max-w-xl items-center rounded-full border border-black/10 bg-white px-4 py-2 shadow-sm transition-colors focus-within:border-[#F59E0B]/40 focus-within:ring-2 focus-within:ring-[#F59E0B]/20">
+            <Search className="mr-2.5 h-4 w-4 shrink-0 text-[#0B1220]/35 transition-colors group-focus-within:text-[#F59E0B]" />
 
-        {/* Right side */}
+            <input
+              type="text"
+              name="q"
+              defaultValue={searchQuery}
+              placeholder="Search your vault..."
+              className="w-full bg-transparent text-sm text-[#0B1220] outline-none placeholder:text-[#0B1220]/40"
+            />
+
+            <button
+              type="submit"
+              className="ml-3 shrink-0 rounded-full bg-[#0B1220] px-4 py-1.5 text-xs font-medium text-white transition hover:bg-[#1E293B]"
+            >
+              Search
+            </button>
+          </div>
+        </form>
+
+        {/* Right */}
         <div className="flex shrink-0 items-center gap-3">
           <Button
             variant="ghost"
@@ -75,53 +87,38 @@ export function Navbar({ user }: NavbarProps) {
 
           <Button
             onClick={() => router.push("/notes/new")}
-            className="hidden bg-[#0B1220] text-white hover:bg-[#0B1220]/90 sm:flex"
+            className="hidden bg-[#0B1220] text-white hover:bg-[#1E293B] sm:flex"
           >
             <Plus className="mr-1.5 h-4 w-4" />
             New Note
           </Button>
+
           <Button
-            onClick={() => router.push("/dashboard/new")}
+            onClick={() => router.push("/notes/new")}
             size="icon"
-            className="bg-[#0B1220] text-white hover:bg-[#0B1220]/90 sm:hidden"
+            className="bg-[#0B1220] text-white hover:bg-[#1E293B] sm:hidden"
           >
             <Plus className="h-4 w-4" />
           </Button>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger className="rounded-full ring-offset-2 transition hover:ring-2 hover:ring-[#F59E0B]/40">
-              <Avatar className="h-9 w-9">
-                <AvatarImage src={user.avatarUrl} alt={user.name} />
-                <AvatarFallback className="bg-[#0B1220] text-xs text-white">
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>
-                <p className="text-sm font-medium text-[#0B1220]">
-                  {user.name}
-                </p>
-                <p className="text-xs font-normal text-[#0B1220]/50">
-                  {user.email}
-                </p>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
-                Settings
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-red-600 focus:text-red-600">
-                <LogOut className="mr-2 h-4 w-4" />
-                Log out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {/* Avatar — display only, not interactive */}
+          <Avatar className="h-9 w-9 cursor-default select-none opacity-70 grayscale-[15%]">
+            <AvatarImage src={user.avatarUrl} alt={user.name} />
+            <AvatarFallback className="bg-[#0B1220] text-xs text-white">
+              {initials}
+            </AvatarFallback>
+          </Avatar>
+
+          {/* Standalone logout button */}
+          <form action={logout}>
+            <button
+              type="submit"
+              title="Log out"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white text-[#0B1220]/60 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </form>
         </div>
       </div>
     </header>

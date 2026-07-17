@@ -17,7 +17,7 @@ const formattedName =
   firstName.slice(1).toLowerCase();
 
   return (
-    <Card className="rounded-2xl border border-black/5 bg-white px-8 py-7 shadow-none">
+    <Card className="rounded-2xl border border-black/5 bg-white p-6 sm:p-7 shadow-none">
       <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-[#F59E0B]">
         DASHBOARD.WELCOME()
       </p>
