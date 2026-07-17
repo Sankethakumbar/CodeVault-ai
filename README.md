@@ -1,4 +1,5 @@
-w# 🚀 CodeVault
+# 🚀 CodeVault
+> **AI-Powered Developer Knowledge Management Platform**
 
 **CodeVault** is an AI-powered note-taking platform that helps developers organize technical knowledge, generate AI insights, and prepare for interviews—all in one place.
 
@@ -184,12 +185,12 @@ This project is built for learning and portfolio purposes.
 ---
 
 # 👨‍💻 Author
+### Sanketha Kumbar
 
-**Sanketha Kumbar**
+Aspiring Full Stack Developer passionate about building scalable web applications and AI-powered solutions.
 
-GitHub: https://github.com/Sankethakumbar
+### Connect with me
 
-LinkedIn: https://www.linkedin.com/in/sanketha-kumbar/
----
+[![GitHub](https://img.shields.io/badge/GitHub-Sankethakumbar-181717?style=for-the-badge&logo=github)](https://github.com/Sankethakumbar)
 
-⭐ If you like this project, consider giving it a star!
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Sanketha%20Kumbar-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/sanketha-kumbar/)
